@@ -10,10 +10,20 @@ import cave.matrix.Matrix;
 public class MatrixTest {
 
 	@Test
-	public void testToString() {
-		Matrix m = new Matrix(3, 4, i->i*2);
+	public void testMultiplyDouble() {
+		Matrix m = new Matrix(3, 4, i -> 0.5 * (i - 6));
+		
+		double x = 0.5;
+		
+		Matrix result = m.apply((index, value)->x * value);
 		
 		System.out.println(m);
+		System.out.println(result);
+	}
+	
+	@Test
+	public void testToString() {
+		Matrix m = new Matrix(3, 4, i->i*2);
 		
 		String text = m.toString();
 		
