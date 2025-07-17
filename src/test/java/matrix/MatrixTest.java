@@ -10,8 +10,10 @@ import cave.matrix.Matrix;
 public class MatrixTest {
 
 	@Test
-	public void constructionTest() {
+	public void testToString() {
 		Matrix m = new Matrix(3, 4, i->i*2);
+		
+		System.out.println(m);
 		
 		String text = m.toString();
 		

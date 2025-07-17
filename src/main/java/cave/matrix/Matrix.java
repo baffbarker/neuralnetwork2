@@ -2,7 +2,7 @@ package cave.matrix;
 
 public class Matrix {
 	
-	private static final String NUMBER_FORMAT = "%12.5f";
+	private static final String NUMBER_FORMAT = "%+12.5f";
 	
 	private int rows;
 	private int cols;
@@ -10,6 +10,10 @@ public class Matrix {
 	public interface Producer {
 		double produce(int index);
 	}
+
+	public interface ValueProducer {
+		double produce(int index, double value);
+	}	
 	
 	private double[] a;
 	
@@ -26,6 +30,16 @@ public class Matrix {
 		for(int i = 0; i < a.length; i++) {
 			a[i] = producer.produce(i);
 		}
+	}
+	
+	public Matrix apply(ValueProducer producer) {
+		Matrix result = new Matrix(rows, cols);
+		
+		for(int i = 0; i < a.length; i++) {
+			result.a[i] = producer.produce(i, a[i]);
+		}
+		
+		return result;
 	}
 	
 	public String toString() {
