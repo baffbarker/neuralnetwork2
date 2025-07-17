@@ -1,6 +1,7 @@
 package matrix;
 
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
@@ -9,6 +10,18 @@ import cave.matrix.Matrix;
 
 public class MatrixTest {
 
+	@Test
+	public void testEquals() {
+		Matrix m1 = new Matrix(3, 4, i -> 0.5 * (i - 6));
+		Matrix m2 = new Matrix(3, 4, i -> 0.5 * (i - 6));
+		Matrix m3 = new Matrix(3, 4, i -> 0.5 * (i - 6.2));
+		
+		assertTrue(m1.equals(m2));;
+		
+		assertFalse(m1.equals(m3));
+		
+	}
+	
 	@Test
 	public void testMultiplyDouble() {
 		Matrix m = new Matrix(3, 4, i -> 0.5 * (i - 6));
