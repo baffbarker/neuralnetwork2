@@ -46,6 +46,10 @@ public class Matrix {
 		return result;
 	}
 	
+	public double get(int index) {
+		return a[index];
+	}
+	
 	
 	
 	@Override
