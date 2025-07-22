@@ -17,6 +17,8 @@ public class MatrixTest {
 		
 		Matrix result = m1.multiply(m2);
 		
+		System.out.println(result);
+		
 		
 		
 	}
