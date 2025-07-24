@@ -15,7 +15,7 @@ public class NeuralNetTest {
 		Matrix weights = new Matrix(3, 3, i->(i+1));
 		Matrix biases = new Matrix(3, 1, i->(i+1));
 		
-		Matrix result = weights.multiply(input);
+		Matrix result = weights.multiply(input).modify((row, col, value)->value + biases.get(row));
 		
 		System.out.println(input);
 		System.out.println(weights);
