@@ -11,6 +11,19 @@ import cave.matrix.Matrix;
 public class MatrixTest {
 
 	@Test
+	public void testSumColumns() {
+		Matrix m = new Matrix(4, 5, i->i);
+		
+		Matrix result = m.sumColumns();
+		
+		double[] expectedValues = {+6.00000, +22.00000, +38.00000, +54.00000, +70.00000};
+		Matrix expected = new Matrix(1, 5, i->expectedValues[i]);
+		
+		assertTrue(expected.equals(result));
+	
+	}
+	
+	@Test
 	public void testMultiply() {
 		Matrix m1 = new Matrix(2, 3, i ->i);
 		Matrix m2 = new Matrix(3, 2, i ->i);
