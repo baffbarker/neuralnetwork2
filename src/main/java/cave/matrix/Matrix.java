@@ -119,6 +119,18 @@ public class Matrix {
 
 		return result;
 	}
+	
+	public Matrix softMax() {
+		Matrix result = new Matrix(rows, cols, i->Math.exp(a[i]));
+		
+		Matrix colSum = result.sumColumns();
+		
+		colSum.modify((row, col, value)->{
+			return value/colSum.get(col);
+		});
+		
+		return result;
+	}
 
 	public double get(int index) {
 		return a[index];
