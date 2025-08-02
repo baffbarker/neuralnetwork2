@@ -145,7 +145,7 @@ public class Matrix {
 		return result;
 	}
 
-	public Matrix softMax() {
+	public Matrix softmax() {
 		Matrix result = new Matrix(rows, cols, i -> Math.exp(a[i]));
 
 		Matrix colSum = result.sumColumns();

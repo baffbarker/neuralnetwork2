@@ -18,7 +18,7 @@ public class MatrixTest {
 	public void testSoftMax() {
 		Matrix m = new Matrix(5, 8, i->random.nextGaussian());
 		
-		Matrix result = m.softMax();
+		Matrix result = m.softmax();
 		
 		System.out.println(result);
 		
