@@ -11,6 +11,21 @@ import cave.matrix.Matrix;
 public class NeuralNetTest {
 	private Random random = new Random();
 
+	@Test
+	public void testApproximator() {
+		final int rows = 4;
+		final int cols = 5;
+		
+		Matrix input = new Matrix(rows, cols, i->random.nextGaussian());
+		
+		Approximator.gradient(input, null);
+		
+		System.out.println();
+		System.out.println(input);
+
+		
+		
+	}
 	
 	@Test
 	public void testCrossEntropy() {
