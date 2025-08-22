@@ -12,8 +12,8 @@ public class NeuralNetTest {
 	private Random random = new Random();
 
 	@Test
-	public void testBackpropWeights() {
-		
+	public void testBackprop() {
+
 		interface NeuralNet {
 			Matrix apply(Matrix m);
 		}
@@ -34,7 +34,14 @@ public class NeuralNetTest {
 			expected.set(randomRow, col, 1);
 		}
 		
-		NeuralNet neuralNet = m -> weights.multiply(m).modify((row, col, value)->value + biases.get(row)).softmax();
+		NeuralNet neuralNet = m -> {
+			Matrix out = m.apply((index, value)->value > 0 ? value: 0);
+			out = weights.multiply(out); // weights
+			out.modify((row, col, value)->value + biases.get(row)); // biases
+			out = out.softmax(); // softmax activation
+			
+			return out;
+		};
 		
 		Matrix softmaxOutput = neuralNet.apply(input);
 		
@@ -45,6 +52,7 @@ public class NeuralNetTest {
 		
 		Matrix calculatedResult = softmaxOutput.apply((index, value)->value - expected.get(index));
 		calculatedResult = weights.transpose().multiply(calculatedResult);
+		calculatedResult = calculatedResult.apply((index, value)->input.get(index) > 0 ? value: 0);
 		
 		assertTrue(approximatedResult.equals(calculatedResult));
 		
