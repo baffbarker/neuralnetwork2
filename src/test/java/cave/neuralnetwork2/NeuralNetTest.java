@@ -13,6 +13,10 @@ public class NeuralNetTest {
 
 	@Test
 	public void testBackpropWeights() {
+		
+		interface NeuralNet {
+			Matrix apply(Matrix m);
+		}
 		final int inputRows = 4;
 		final int cols = 5;
 		final int outputRows = 4;
@@ -30,11 +34,13 @@ public class NeuralNetTest {
 			expected.set(randomRow, col, 1);
 		}
 		
-		Matrix softmaxOutput = weights.multiply(input).modify((row, col, value)->value + biases.get(row)).softmax();
+		NeuralNet neuralNet = m -> weights.multiply(m).modify((row, col, value)->value + biases.get(row)).softmax();
+		
+		Matrix softmaxOutput = neuralNet.apply(input);
 		
 		Matrix approximatedResult = Approximator.gradient(input, in->{
-			in = weights.multiply(in).modify((row, col, value)->value + biases.get(row));
-			return LossFunction.crossEntropy(expected, in.softmax());
+			Matrix out = neuralNet.apply(in);
+			return LossFunction.crossEntropy(expected, out);
 		});
 		
 		Matrix calculatedResult = softmaxOutput.apply((index, value)->value - expected.get(index));
