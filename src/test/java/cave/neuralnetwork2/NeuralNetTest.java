@@ -21,6 +21,9 @@ public class NeuralNetTest {
 		
 		Matrix expected = new Matrix(outputRows, cols, i->0);
 		
+		Matrix weights = new Matrix(outputRows, inputRows, i->random.nextGaussian());
+		Matrix biases = new Matrix(outputRows, 1, i->random.nextGaussian());
+		
 		for(int col = 0; col < cols; col++) {
 			int randomRow = random.nextInt(outputRows);
 			
