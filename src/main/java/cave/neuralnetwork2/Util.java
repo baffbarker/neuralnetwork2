@@ -11,7 +11,7 @@ public class Util {
 		return new Matrix(rows, cols, i->random.nextGaussian());
 	}
 	
-	public Matrix generateExpectedMatrix(int rows, int cols) {
+	public static Matrix generateExpectedMatrix(int rows, int cols) {
 		Matrix expected = new Matrix(rows, cols, i->0);
 		
 		for(int col = 0; col < cols; col++) {
