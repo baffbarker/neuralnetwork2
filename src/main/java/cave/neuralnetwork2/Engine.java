@@ -12,6 +12,8 @@ public class Engine {
 	
 	private LossFunction lossFunction = LossFunction.CROSSENTROPY;
 	
+	private boolean storeInputError = false;
+	
 	BatchResult runForwards(Matrix input) {
 		
 		BatchResult batchResult = new BatchResult();
@@ -45,13 +47,17 @@ public class Engine {
 	}
 	
 	
-	public Matrix runBackwards(BatchResult batchResult, Matrix expected) {
+	public void runBackwards(BatchResult batchResult, Matrix expected) {
 		
 		var transformsIt = transforms.descendingIterator();
 		
 		if(lossFunction != LossFunction.CROSSENTROPY || transforms.getLast() != Transform.SOFTMAX) {
 			throw new UnsupportedOperationException("Loss function must be cross entropy and last transform must be softmax");
 		}
+		
+		var ioIt = batchResult.getIo().descendingIterator();
+		Matrix softmaxOutput = ioIt.next();
+		Matrix error = softmaxOutput.apply((index, value)->value - expected.get(index));
 		
 		while(transformsIt.hasNext()) {
 			Transform transform = transformsIt.next();
@@ -69,7 +75,10 @@ public class Engine {
 			
 			System.out.println(transform);
 		}
-		return null;
+		
+		if(storeInputError) {
+			batchResult.setInputError(error);
+		}
 	}
 	
 	
@@ -90,6 +99,13 @@ public class Engine {
 		transforms.add(transform);
 	}
 	
+	
+	
+	public void setStoreInputError(boolean storeInputError) {
+		this.storeInputError = storeInputError;
+	}
+
+
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
