@@ -23,9 +23,9 @@ public class NeuralNetTest {
 		
 		
 		engine.add(Transform.DENSE, 8, 5);
-		//engine.add(Transform.RELU);
+		engine.add(Transform.RELU);
 		engine.add(Transform.DENSE, 5);
-		//engine.add(Transform.RELU);
+		engine.add(Transform.RELU);
 		engine.add(Transform.DENSE, 4);
 		
 		engine.add(Transform.SOFTMAX);
