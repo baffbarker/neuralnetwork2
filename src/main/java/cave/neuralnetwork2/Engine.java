@@ -56,6 +56,7 @@ public class Engine {
 		}
 		
 		var ioIt = batchResult.getIo().descendingIterator();
+		var weightIt = weights.descendingIterator();
 		Matrix softmaxOutput = ioIt.next();
 		Matrix error = softmaxOutput.apply((index, value)->value - expected.get(index));
 		
@@ -64,6 +65,8 @@ public class Engine {
 			
 			switch(transform) {
 			case DENSE:
+				Matrix weight = weightIt.next();
+				error = weight.transpose().multiply(error);
 				break;
 			case RELU:
 				break;	
