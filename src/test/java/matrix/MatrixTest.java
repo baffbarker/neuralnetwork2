@@ -16,8 +16,8 @@ public class MatrixTest {
 	
 	@Test
 	public void testAverageColumn() {
-		int rows = 3;
-		int cols = 4;
+		int rows = 7;
+		int cols = 5;
 		
 		Matrix m = new Matrix(rows, cols, i->2 * i - 3);
 		
@@ -25,8 +25,9 @@ public class MatrixTest {
 		Matrix expected = new Matrix(rows, 1);
 		expected.modify((row, col, value)->2 * (row * cols + averageIndex) - 3);
 		
-		System.out.println(m);
-		System.out.println(expected);
+		Matrix result = m.averageColumn();
+		
+		assertTrue(expected.equals(result));
 	}
 	
 	@Test

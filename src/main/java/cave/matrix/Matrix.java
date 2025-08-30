@@ -174,6 +174,15 @@ public class Matrix {
 		return result;
 	}
 	
+	public Matrix averageColumn() {
+		Matrix result = new Matrix(rows, 1);
+		
+		forEach((row, col, index, value)->{
+			result.a[row] += value/cols;
+		});
+		return result;
+	}
+	
 	public Matrix softmax() {
 		Matrix result = new Matrix(rows, cols, i -> Math.exp(a[i]));
 
