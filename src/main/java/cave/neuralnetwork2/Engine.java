@@ -22,6 +22,8 @@ public class Engine {
 		
 		double loss = LossFunctions.crossEntropy(expected, batchResult.getOutput()).averageColumn().get(0);
 		
+		batchResult.setLoss(loss);
+		
 	}
 
 	BatchResult runForwards(Matrix input) {
@@ -36,6 +38,7 @@ public class Engine {
 		for (var t : transforms) {
 			if (t == Transform.DENSE) {
 
+				batchResult.addWeightInput(output);
 				Matrix weight = weights.get(denseIndex);
 				Matrix bias = biases.get(denseIndex);
 				output = weight.multiply(output).modify((row, col, value) -> value + bias.get(row));
@@ -53,6 +56,14 @@ public class Engine {
 		return batchResult;
 	}
 
+	public void adjust(BatchResult batchResult, double learningRate) {
+		var weightInputs = batchResult.getWeightInputs();
+		var  weightErrors = batchResult.getWeightErrors();
+		
+		assert weightInputs.size() == weightErrors.size();
+		assert weightInputs.size() == weights.size();
+	}
+	
 	public void runBackwards(BatchResult batchResult, Matrix expected) {
 
 		var transformsIt = transforms.descendingIterator();
@@ -75,6 +86,8 @@ public class Engine {
 			switch (transform) {
 			case DENSE:
 				Matrix weight = weightIt.next();
+				
+				batchResult.addWeightError(error);
 
 				if (weightIt.hasNext() || storeInputError) {
 
