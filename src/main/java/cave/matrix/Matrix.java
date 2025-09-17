@@ -156,6 +156,25 @@ public class Matrix {
 
 		return result;
 	}
+	
+	public Matrix getGreatestRowNumbers() {
+		Matrix result = new Matrix(1, cols);
+		
+		double[] greatest = new double[cols];
+		
+		for(int i = 0; i < cols; i++) {
+			greatest[i] = Double.MIN_VALUE;
+		}
+		
+		forEach((row, col, value)->{
+			if(value > greatest[col]) {
+				greatest[col] = value;
+				result.a[col] = row;
+			}
+		});
+		
+		return result;
+	}
 
 	public Matrix sumColumns() {
 		Matrix result = new Matrix(1, cols);

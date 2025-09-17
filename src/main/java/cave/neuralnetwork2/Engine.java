@@ -22,6 +22,22 @@ public class Engine {
 		
 		double loss = LossFunctions.crossEntropy(expected, batchResult.getOutput()).averageColumn().get(0);
 		
+		Matrix predictions = batchResult.getOutput().getGreatestRowNumbers();
+		Matrix actual = expected.getGreatestRowNumbers();
+		
+		int correct = 0;
+		
+		for(int i = 0; i < actual.getCols(); i++) {
+			if((int)actual.get(i) == (int)predictions.get(i)) {
+				++correct;
+			}
+		}
+		
+		double percentCorrect = (100.0 * correct)/actual.getCols();
+		
+		batchResult.setLoss(loss);
+		batchResult.setPercentCorrect(percentCorrect);
+		
 		batchResult.setLoss(loss);
 		
 	}
@@ -137,7 +153,7 @@ public class Engine {
 			int weightsPerNeuron = weights.size() == 0 ? (int) params[1] : weights.getLast().getRows();
 
 			Matrix weight = new Matrix(numberNeurons, weightsPerNeuron, i -> random.nextGaussian());
-			Matrix bias = new Matrix(numberNeurons, 1, i -> 0);
+			Matrix bias = new Matrix(numberNeurons, 1, i -> random.nextGaussian());
 
 			weights.add(weight);
 			biases.add(bias);

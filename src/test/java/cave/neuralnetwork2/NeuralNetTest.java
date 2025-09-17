@@ -22,7 +22,7 @@ public class NeuralNetTest {
 		
 		Engine engine = new Engine();
 		engine.add(Transform.DENSE, 6, inputRows);
-		engine.add(Transform.RELU, null);
+		engine.add(Transform.RELU);
 		engine.add(Transform.DENSE, outputRows);
 		engine.add(Transform.SOFTMAX);
 		
@@ -37,8 +37,9 @@ public class NeuralNetTest {
 		engine.evaluate(batchResult, expected);
 		
 		double loss2 = batchResult.getLoss();
+		double percentCorrect = batchResult.getPercentCorrect();
 		
-		System.out.println(loss1 + " " + loss2);
+		System.out.println(loss1 + " " + loss2 + " " + percentCorrect);
 		
 		
 		
@@ -57,16 +58,18 @@ public class NeuralNetTest {
 
 		Matrix output = weights.multiply(input).softmax();
 
-		Matrix loss = LossFunctions.crossEntropy(expected, output);
-
 		Matrix calculatedError = output.apply((index, value) -> value - expected.get(index));
 
 		Matrix calculatedWeightGradients = calculatedError.multiply(input.transpose());
 
-		Matrix approximatedWeightGradients = Approximator.weightGradient(weights, w -> {
-			Matrix out = w.multiply(input).softmax();
-			return LossFunctions.crossEntropy(expected, out);
-		});
+		Matrix approximatedWeightGradients = Approximator.weightGradient(
+				weights, 
+				w -> {
+					Matrix out = w.multiply(input).softmax();
+					return LossFunctions.crossEntropy(expected, out);
+				}
+		);
+		
 		
 		calculatedWeightGradients.setTolerance(0.01);
 		assertTrue(calculatedWeightGradients.equals(approximatedWeightGradients));
