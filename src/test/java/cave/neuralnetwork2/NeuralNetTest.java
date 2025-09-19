@@ -25,6 +25,10 @@ public class NeuralNetTest {
 		engine.add(Transform.DENSE, outputRows);
 		engine.add(Transform.SOFTMAX);
 		
+		RunningAverages runningAverages = new RunningAverages(2, 10, (callNumber, averages)->{});
+		
+		System.exit(0);
+		
 		for(int i = 0; i < 2000; i++) {
 		var tm = Util.generateTrainingMatrixes(inputRows, outputRows, cols);
 		var input = tm.getInput();
