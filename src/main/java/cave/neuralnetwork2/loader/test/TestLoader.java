@@ -1,5 +1,6 @@
 package cave.neuralnetwork2.loader.test;
 
+import cave.neuralnetwork2.Util;
 import cave.neuralnetwork2.loader.BatchData;
 import cave.neuralnetwork2.loader.MetaData;
 
@@ -47,8 +48,32 @@ public class TestLoader implements cave.neuralnetwork2.loader.Loader {
 
 	@Override
 	public BatchData readBatch() {
-		// TODO Auto-generated method stub
-		return null;
+		if(totalItemsRead == numberItems) {
+			return null;
+		}
+		
+		itemsRead = batchSize;
+		
+		totalItemsRead += itemsRead;
+		
+		int excessItems = totalItemsRead - numberItems;
+		
+		if(excessItems > 9) {
+			totalItemsRead -=excessItems;
+			itemsRead -= excessItems;
+		}
+		
+		var io = Util.generateTrainingArrays(inputSize, expectedSize, itemsRead);
+		
+		var batchData = new TestBatchData();
+		batchData.setInputBatch(io.getInput());
+		batchData.setExpectedBatch(io.getOutput());
+		
+		metaData.setTotalItemsRead(totalItemsRead);
+		metaData.setItemsRead(itemsRead);
+
+		return batchData;
+		
 	}
 
 }

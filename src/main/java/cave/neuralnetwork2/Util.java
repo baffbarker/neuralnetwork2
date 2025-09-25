@@ -7,8 +7,8 @@ import cave.matrix.Matrix;
 public class Util {
 	
 	private static Random random = new Random();
-	public static Matrix generateInputMatrix(int rows, int cols) {
-		return new Matrix(rows, cols, i->random.nextGaussian());
+	public static Matrix generateInputMatrix(int rows, int numberItems) {
+		return new Matrix(rows, numberItems, i->random.nextGaussian());
 	}
 	
 	public static TrainingMatrixes generateTrainingMatrixes(int inputSize, int outputSize, int cols) {
