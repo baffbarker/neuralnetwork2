@@ -11,12 +11,12 @@ public class Util {
 		return new Matrix(rows, cols, i->random.nextGaussian());
 	}
 	
-	public static TrainingMatrixes generateTrainingMatrixes(int inputRows, int outputRows, int cols) {
+	public static TrainingMatrixes generateTrainingMatrixes(int inputSize, int outputSize, int cols) {
 		
-		var io = generateTrainingArrays(inputRows, outputRows, cols);
+		var io = generateTrainingArrays(inputSize, outputSize, cols);
 		
-		Matrix input = new Matrix(inputRows, cols, io.getInput());
-		Matrix output = new Matrix(outputRows, cols, io.getOutput());
+		Matrix input = new Matrix(inputSize, cols, io.getInput());
+		Matrix output = new Matrix(outputSize, cols, io.getOutput());
 		
 		
 		
