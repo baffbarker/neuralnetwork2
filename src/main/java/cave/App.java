@@ -2,6 +2,8 @@ package cave;
 
 import cave.neuralnetwork2.NeuralNetwork;
 import cave.neuralnetwork2.Transform;
+import cave.neuralnetwork2.loader.Loader;
+import cave.neuralnetwork2.loader.test.TestLoader;
 
 public class App {
 
@@ -15,6 +17,13 @@ public class App {
 		neuralnetwork.add(Transform.DENSE, outputRows);
 		neuralnetwork.add(Transform.SOFTMAX);
 		
+		neuralnetwork.setEpochs(20);
+		neuralnetwork.setLearningRates(0.02, 0);
+		
+		Loader trainLoader = new TestLoader(60_000, 32);
+		Loader testLoader = new TestLoader(10_000, 32);
+		
+		neuralnetwork.fit(trainLoader, testLoader);
 		
 		System.out.println(neuralnetwork);
 	}
