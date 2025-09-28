@@ -47,6 +47,22 @@ public class NeuralNetwork {
 
 	private void runEpoch(Loader loader, boolean trainingMode) {
 		
+		loader.open();
+		
+		var queue = createBatchTasks(loader, trainingMode);
+		consumeBatchTasks(queue, trainingMode);
+		
+		loader.close();
+	}
+
+	private void consumeBatchTasks(Object queue, boolean trainingMode) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private Object createBatchTasks(Loader loader, boolean trainingMode) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	@Override
