@@ -174,6 +174,10 @@ public class Engine {
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 
+		sb.append(String.format("Scale initial weights: %.3f\n", scaleInitialWeights));
+		
+		sb.append("\nTransforms:\n");
+		
 		int weightIndex = 0;
 		for (var t : transforms) {
 
