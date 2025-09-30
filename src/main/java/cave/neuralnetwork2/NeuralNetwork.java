@@ -1,7 +1,9 @@
 package cave.neuralnetwork2;
 
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.LinkedList;
@@ -196,4 +198,19 @@ public class NeuralNetwork implements Serializable {
 		return true;
 	}
 
+	public static NeuralNetwork load(String file) {
+		
+		NeuralNetwork neuralnetwork = null;
+		
+		try(var ds = new ObjectInputStream(new FileInputStream(file))) {
+			var neuralNetwork = (NeuralNetwork)ds.readObject();
+		}
+		catch(Exception e) {
+			System.err.println("Unable to load from " + file);
+		}
+		
+		return neuralnetwork;
+	}
+	
+	
 }

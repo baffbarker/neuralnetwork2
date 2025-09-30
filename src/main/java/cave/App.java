@@ -9,27 +9,39 @@ public class App {
 
 	public static void main(String[] args) {
 		
-		int inputRows = 10;
-		int outputRows = 3;
-		NeuralNetwork neuralnetwork = new NeuralNetwork();
-		neuralnetwork.add(Transform.DENSE, 100, inputRows);
-		neuralnetwork.add(Transform.RELU);
-		neuralnetwork.add(Transform.DENSE, 50);
-		neuralnetwork.add(Transform.DENSE, outputRows);
-		neuralnetwork.add(Transform.SOFTMAX);
+		String filename = "neural1.net";
 		
-		neuralnetwork.setThreads(5);
-		neuralnetwork.setEpochs(1);
-		neuralnetwork.setLearningRates(0.02, 0.001);
+		NeuralNetwork neuralnetwork = NeuralNetwork.load(filename);
+		
+		if(neuralnetwork == null) {
+			System.out.println("Unable to load neiral network from saved. Creating from scratch.");
+			
+			int inputRows = 10;
+			int outputRows = 3;
+			neuralnetwork = new NeuralNetwork();
+			neuralnetwork.add(Transform.DENSE, 100, inputRows);
+			neuralnetwork.add(Transform.RELU);
+			neuralnetwork.add(Transform.DENSE, 50);
+			neuralnetwork.add(Transform.DENSE, outputRows);
+			neuralnetwork.add(Transform.SOFTMAX);
+			
+			neuralnetwork.setThreads(5);
+			neuralnetwork.setEpochs(1);
+			neuralnetwork.setLearningRates(0.02, 0.001);
+		}
+		else {
+			System.out.println("Loaded from " + filename);
+		}
+		
+
 		System.out.println(neuralnetwork);
-		
 		
 		Loader trainLoader = new TestLoader(60_000, 32);
 		Loader testLoader = new TestLoader(10_000, 32);
 		
 		neuralnetwork.fit(trainLoader, testLoader);
 	
-		neuralnetwork.save("neural1.net");
+		neuralnetwork.save(filename);
 		
 	}
 
