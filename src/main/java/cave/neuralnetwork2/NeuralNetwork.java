@@ -1,7 +1,10 @@
 package cave.neuralnetwork2;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.LinkedList;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
@@ -10,16 +13,18 @@ import cave.neuralnetwork2.loader.BatchData;
 import cave.neuralnetwork2.loader.Loader;
 import cave.neuralnetwork2.loader.MetaData;
 
-public class NeuralNetwork {
+public class NeuralNetwork implements Serializable {
+	private static final long serialVersionUID = 1L;
+
 	private Engine engine;
 
-	private int epochs = 20;
+	private int epochs = 1;
 	private double initialLearningRate = 0.01;
 	private double finalLearningRate = 0.001;
 	private int threads = 2;
 
-	private double learningRate;
-	private Object lock = new Object();
+	transient private double learningRate;
+	transient private Object lock = new Object();
 
 	public NeuralNetwork() {
 		engine = new Engine();
@@ -177,6 +182,18 @@ public class NeuralNetwork {
 		
 		
 		return sb.toString();
+	}
+
+	public boolean save(String file) {
+		try(var ds = new ObjectOutputStream(new FileOutputStream(file))) {
+			ds.writeObject(this);
+		}
+		catch(IOException e) {
+			System.err.println("Unable to save to " + file);
+			return false;
+		}
+		
+		return true;
 	}
 
 }
