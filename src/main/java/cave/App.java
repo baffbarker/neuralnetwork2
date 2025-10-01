@@ -10,11 +10,15 @@ public class App {
 	public static void main(String[] args) {
 		
 		String filename = "neural1.net";
+
+		System.out.println(Runtime.getRuntime().availableProcessors());
 		
 		NeuralNetwork neuralnetwork = NeuralNetwork.load(filename);
 		
 		if(neuralnetwork == null) {
 			System.out.println("Unable to load neural network from saved. Creating from scratch.");
+			
+
 			
 			int inputRows = 10;
 			int outputRows = 3;
@@ -25,7 +29,7 @@ public class App {
 			neuralnetwork.add(Transform.DENSE, outputRows);
 			neuralnetwork.add(Transform.SOFTMAX);
 			
-			neuralnetwork.setThreads(5);
+			neuralnetwork.setThreads(8);
 			neuralnetwork.setEpochs(50);
 			neuralnetwork.setLearningRates(0.02, 0.001);
 		}

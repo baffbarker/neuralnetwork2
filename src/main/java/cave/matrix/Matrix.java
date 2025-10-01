@@ -331,4 +331,8 @@ public class Matrix implements Serializable {
 		return sb.toString();
 
 	}
+
+	public double[] get() {
+		return a;
+	}
 }
