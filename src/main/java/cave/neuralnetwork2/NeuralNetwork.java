@@ -20,7 +20,7 @@ public class NeuralNetwork implements Serializable {
 
 	private Engine engine;
 
-	private int epochs = 1;
+	private int epochs = 50;
 	private double initialLearningRate = 0.01;
 	private double finalLearningRate = 0.001;
 	private int threads = 2;
@@ -200,17 +200,21 @@ public class NeuralNetwork implements Serializable {
 
 	public static NeuralNetwork load(String file) {
 		
-		NeuralNetwork neuralnetwork = null;
+		NeuralNetwork neuralNetwork = null;
 		
 		try(var ds = new ObjectInputStream(new FileInputStream(file))) {
-			var neuralNetwork = (NeuralNetwork)ds.readObject();
+			neuralNetwork = (NeuralNetwork)ds.readObject();
 		}
 		catch(Exception e) {
 			System.err.println("Unable to load from " + file);
 		}
 		
-		return neuralnetwork;
+		return neuralNetwork;
 	}
 	
+	public Object readResolve() {
+		this.lock = new Object();
+		return this;
+	}
 	
 }
