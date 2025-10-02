@@ -3,6 +3,9 @@ package cave;
 import java.io.File;
 import java.io.IOException;
 
+import cave.neuralnetwork2.loader.Loader;
+import cave.neuralnetwork2.loader.image.ImageLoader;
+
 public class App {
 
 	public static void main(String[] args) {
@@ -12,9 +15,13 @@ public class App {
 			return;
 		}
 		
-		System.out.println("Hello");
-		
+		final String trainImages = "train-images-idx3-ubyte";
+		final String trainLabels = "train-labels-idx1-ubyte";
+		final String testImages = "t10k-images-idx3-ubyte";
+		final String testLabels = "t10k-labels-idx1-ubyte";
 
+		Loader trainLoader = new ImageLoader(trainImages, trainLabels, 32);
+		Loader testLoader = new ImageLoader(testImages, testLabels, 32);
 	}
 
 }
