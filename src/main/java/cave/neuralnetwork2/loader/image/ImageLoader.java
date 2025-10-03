@@ -1,5 +1,8 @@
 package cave.neuralnetwork2.loader.image;
 
+import java.io.DataInputStream;
+import java.io.FileInputStream;
+
 import cave.neuralnetwork2.loader.BatchData;
 import cave.neuralnetwork2.loader.Loader;
 import cave.neuralnetwork2.loader.MetaData;
@@ -9,6 +12,10 @@ public class ImageLoader implements Loader{
 	private String labelFileName;
 	private int batchSize;
 	
+	private DataInputStream dsImages;
+	private DataInputStream dsLabels;
+	
+	
 	public ImageLoader(String imageFileName, String labelFileName, int batchSize) {
 		this.imageFileName = imageFileName;
 		this.labelFileName = labelFileName;
@@ -17,13 +24,38 @@ public class ImageLoader implements Loader{
 
 	@Override
 	public MetaData open() {
-		// TODO Auto-generated method stub
+		try {
+			dsImages = new DataInputStream(new FileInputStream(imageFileName));
+		}
+		catch(Exception e) {
+			throw new LoaderException("Cannot open " + imageFileName,e);
+		}
+		
+		try {
+			dsLabels = new DataInputStream(new FileInputStream(labelFileName));
+		}
+		catch(Exception e) {
+			throw new LoaderException("Cannot open " + labelFileName,e);
+		}
+		
 		return null;
 	}
 
 	@Override
 	public void close() {
-		// TODO Auto-generated method stub
+		try {
+			dsImages.close();
+		}
+		catch(Exception e) {
+			throw new LoaderException("Cannot close " + imageFileName, e);
+		}
+		
+		try {
+			dsLabels.close();
+		}
+		catch(Exception e) {
+			throw new LoaderException("Cannot close " + labelFileName, e);
+		}
 		
 	}
 
