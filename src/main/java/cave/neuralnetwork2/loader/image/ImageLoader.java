@@ -45,6 +45,8 @@ public class ImageLoader implements Loader{
 	
 	private MetaData readMetaData() {
 		
+		int numberItems = 0;
+		
 		try {
 			int magicLabelNumber = dsLabels.readInt();
 			
@@ -52,12 +54,33 @@ public class ImageLoader implements Loader{
 				throw new LoaderException("Label file " + labelFileName + " has wrong format. ");
 			}
 			
-			int numberLabels = dsLabels.readInt();
+			numberItems = dsLabels.readInt();
 			
-			System.out.println("Number labels: " + numberLabels);
 		} catch (IOException e) {
 			throw new LoaderException("Unable to read " + labelFileName, e);
 		}
+		
+		try {
+			int magicImageNumber = dsImages.readInt();
+			
+			if(magicImageNumber != 2051) {
+				throw new LoaderException("Image file " + imageFileName + " has wrong format. ");
+			}
+			
+			if(dsImages.readInt() != numberItems) {
+				throw new LoaderException("Image file " + imageFileName + " has different number ofitems to " + labelFileName);
+			}
+			
+			int height = dsImages.readInt();
+			int width = dsImages.readInt();
+			
+			System.out.println(height + " , " + width);
+			
+		} catch (IOException e) {
+			throw new LoaderException("Unable to read " + imageFileName, e);
+		}
+		
+		
 		return null;
 		
 	}
