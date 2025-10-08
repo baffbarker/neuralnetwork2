@@ -5,7 +5,6 @@ import java.util.Arrays;
 import java.util.Objects;
 
 public class Matrix implements Serializable {
-
 	private static final long serialVersionUID = 1L;
 	private static final String NUMBER_FORMAT = "%+12.5f";
 	private double tolerance = 0.000001;
@@ -28,7 +27,7 @@ public class Matrix implements Serializable {
 	public interface IndexValueConsumer {
 		void consume(int index, double value);
 	}
-
+	
 	public interface RowColValueConsumer {
 		void consume(int row, int col, double value);
 	}
@@ -47,6 +46,7 @@ public class Matrix implements Serializable {
 
 		this.rows = rows;
 		this.cols = cols;
+
 		a = new double[rows * cols];
 	}
 
@@ -57,16 +57,16 @@ public class Matrix implements Serializable {
 			a[i] = producer.produce(i);
 		}
 	}
-
+	
 	public Matrix(int rows, int cols, double[] values) {
+		
 		this.rows = rows;
 		this.cols = cols;
 		
 		Matrix tmp = new Matrix(cols, rows);
 		tmp.a = values;
 		Matrix transposed = tmp.transpose();
-		a = transposed.a;
-		
+		a = transposed.a;	
 	}
 	
 	public int getRows() {
@@ -76,8 +76,7 @@ public class Matrix implements Serializable {
 	public int getCols() {
 		return cols;
 	}
-	
-	
+
 	public Matrix apply(IndexValueProducer producer) {
 		Matrix result = new Matrix(rows, cols);
 
@@ -91,6 +90,7 @@ public class Matrix implements Serializable {
 	public Matrix modify(RowColProducer producer) {
 
 		int index = 0;
+
 		for (int row = 0; row < rows; ++row) {
 			for (int col = 0; col < cols; ++col) {
 
@@ -99,6 +99,7 @@ public class Matrix implements Serializable {
 				++index;
 			}
 		}
+
 		return this;
 	}
 
@@ -131,9 +132,8 @@ public class Matrix implements Serializable {
 				consumer.consume(row, col, index, a[index++]);
 			}
 		}
-
 	}
-
+	
 	public void forEach(RowColValueConsumer consumer) {
 
 		int index = 0;
@@ -143,12 +143,10 @@ public class Matrix implements Serializable {
 				consumer.consume(row, col, a[index++]);
 			}
 		}
-
 	}
 
 	public void forEach(IndexValueConsumer consumer) {
 		for (int i = 0; i < a.length; ++i) {
-
 			consumer.consume(i, a[i]);
 		}
 	}
@@ -156,12 +154,11 @@ public class Matrix implements Serializable {
 	public Matrix multiply(Matrix m) {
 		Matrix result = new Matrix(rows, m.cols);
 
-		assert cols == m.rows : "Cannot multiply: wrong number of rows vs columns.";
+		assert cols == m.rows : "Cannot multiply; wrong number of rows vs cols";
 
-		for (int n = 0; n < cols; n++) {
-			for (int col = 0; col < result.cols; col++) {
-				for (int row = 0; row < result.rows; row++) {
-
+		for (int row = 0; row < result.rows; row++) {
+			for (int n = 0; n < cols; n++) {
+				for (int col = 0; col < result.cols; col++) {
 					result.a[row * result.cols + col] += a[row * cols + n] * m.a[col + n * m.cols];
 				}
 			}
@@ -201,7 +198,7 @@ public class Matrix implements Serializable {
 
 	public Matrix sumColumns() {
 		Matrix result = new Matrix(1, cols);
-
+		
 		int index = 0;
 
 		for (int row = 0; row < rows; row++) {
@@ -212,7 +209,7 @@ public class Matrix implements Serializable {
 
 		return result;
 	}
-
+	
 	public Matrix transpose() {
 		Matrix result = new Matrix(cols, rows);
 		
@@ -232,25 +229,26 @@ public class Matrix implements Serializable {
 		forEach((row, col, index, value)->{
 			result.a[row] += value/cols;
 		});
+		
 		return result;
 	}
 	
 	public Matrix softmax() {
-		Matrix result = new Matrix(rows, cols, i -> Math.exp(a[i]));
-
+		Matrix result = new Matrix(rows, cols, i->Math.exp(a[i]));
+		
 		Matrix colSum = result.sumColumns();
-
-		result.modify((row, col, value) -> {
-			return value / colSum.get(col);
+		
+		result.modify((row, col, value)->{
+			return value/colSum.get(col);
 		});
-
+		
 		return result;
 	}
-
+	
 	public void set(int row, int col, double value) {
 		a[row * cols + col] = value;
 	}
-
+	
 	public double get(int row, int col) {
 		return a[row * cols + col];
 	}
@@ -267,13 +265,13 @@ public class Matrix implements Serializable {
 		
 		return result;
 	}
-	
+
 	public double get(int index) {
 		return a[index];
 	}
+	
+	
 
-	
-	
 	public void setTolerance(double tolerance) {
 		this.tolerance = tolerance;
 	}
@@ -302,6 +300,7 @@ public class Matrix implements Serializable {
 				return false;
 			}
 		}
+
 		return true;
 	}
 	
@@ -325,11 +324,11 @@ public class Matrix implements Serializable {
 
 				index++;
 			}
+
 			sb.append("\n");
 		}
 
 		return sb.toString();
-
 	}
 
 	public double[] get() {
