@@ -2,6 +2,7 @@ package cave.neuralnetwork.loader.image;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
@@ -65,6 +66,7 @@ public class ImageWriter {
 		int imageWidth = metaData.getWidth();
 		int imageHeight = metaData.getHeight();
 		
+		int labelSize = metaData.getExpectedSize();
 		
 		for (int i = 0; i < metaData.getNumberBatches(); i++) {
 			BatchData batchData = testLoader.readBatch();
@@ -117,11 +119,32 @@ public class ImageWriter {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			
+
 			var labelData = batchData.getExpectedBatch();
-			int label = convertOneHotToInt(labelData, 0, metaData.getExpectedSize());
 			
-			System.out.println(label);
+			StringBuilder sb = new StringBuilder();
+			
+			for(int labelIndex = 0; labelIndex < numberImages; labelIndex++) {
+				
+				if(labelIndex % horizontalImages == 0) {
+					sb.append("\n");
+				}
+				int label = convertOneHotToInt(labelData, labelIndex * labelSize, labelSize);
+				sb.append(String.format("%d ", label));
+			}
+
+			String labelPath = String.format("labels%d.txt", i);
+			System.out.println("Writing " + labelPath);
+			try {
+				FileWriter fw = new FileWriter(labelPath);
+				fw.write(sb.toString());
+				fw.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+
 		}
 
 		loader.close();
