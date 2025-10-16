@@ -4,9 +4,11 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Arrays;
 
 import javax.imageio.ImageIO;
 
+import cave.neuralnetwork.NeuralNetwork;
 import cave.neuralnetwork.loader.BatchData;
 import cave.neuralnetwork.loader.Loader;
 import cave.neuralnetwork.loader.MetaData;
@@ -66,6 +68,8 @@ public class ImageWriter {
 
 		ImageMetaData metaData = loader.open();
 		
+		var neuralNetwork = NeuralNetwork.load("mnistNeural0.net");
+		
 		int imageWidth = metaData.getWidth();
 		int imageHeight = metaData.getHeight();
 		
@@ -93,8 +97,24 @@ public class ImageWriter {
 			var montage = new BufferedImage(canvasWidth, canvasHeight, BufferedImage.TYPE_BYTE_GRAY);
 			
 			double[] pixelData = batchData.getInputBatch();
+			double[] labelData = batchData.getExpectedBatch();
 			
 			int imageSize = imageWidth * imageHeight;
+			
+			boolean[] correct = new boolean[numberImages];
+			
+			for( int n = 0; n < numberImages; n++) {
+				double[] singleImage = Arrays.copyOfRange(pixelData, n * imageSize, (n + 1) * imageSize);
+				double[] singleLabel = Arrays.copyOfRange(labelData, n * labelSize, (n + 1) * labelSize);
+				
+				double[] predictedLabel = neuralNetwork.predict(singleImage);
+				
+				int predicted = convertOneHotToInt(predictedLabel, 0, labelSize);
+				int actual = convertOneHotToInt(singleLabel, 0, labelSize);
+				
+				correct[n] = predicted == actual;
+				
+			}
 			
 			for(int pixelIndex = 0; pixelIndex < pixelData.length; pixelIndex++) {
 				int imageNumber = pixelIndex/imageSize;
@@ -123,7 +143,7 @@ public class ImageWriter {
 				e.printStackTrace();
 			}
 
-			var labelData = batchData.getExpectedBatch();
+
 			
 			StringBuilder sb = new StringBuilder();
 			
